@@ -1,0 +1,35 @@
+####################################
+#Script: This script is used to make API calls to generate Token
+###################################
+
+#Importing the required Libraries for Python script
+import requests, json
+
+
+
+def gettoken():
+
+        #Required Body parameters for Token Generation Call
+        tokenfile = "tokenfilename"
+
+        #URL for Token Generation Call
+        tokenurl = 'YourURL'
+
+
+        #Reading the file and caching the values
+        fileout = open(tokenfile, "r")
+        tokenbody = fileout.read()
+
+
+
+
+
+        jsonraw = requests.post(tokenurl,data=tokenbody)
+        jsontext = json.loads(jsonraw.text)
+        accesstoken = jsontext['access_token']
+        fileout.close()
+        return(accesstoken)
+############################################
+Token File
+
+{"prm1" : "aaa", "prm2" : "bbb"}
