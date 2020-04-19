@@ -1,0 +1,58 @@
+####################################
+#Script: Making an API call to an URL using configuration information and logging data to log files
+#Created By: Raghu T
+#Creation Date: 2020-03-18
+#Version Number: 0.1 (Initial Version)
+#Updated Date: 2020-03-18
+###################################
+
+
+
+
+
+from tokengen import gettoken
+import requests, urllib3, json
+import datetime
+
+token = gettoken()
+head= {'Authorization': 'Bearer ' +token}
+conf_file = "set.conf"
+script_id = "id1"
+
+#Importing configuration Information from set.conf file
+
+conf_file = open(conf_file,"r")
+read_cfile = conf_file.read()
+confline = ""
+for line in read_cfile.splitlines():
+        if script_id in line:
+                myline = line
+                break
+jsontext = json.loads(myline)
+logfile = jsontext['logfile']
+url = jsontext['url']
+msp_data = jsontext['msp_body']
+
+
+
+#Suprress certificate warnings - Not really needed as process is internal
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+logfwrite = open(logfile,"a")
+logfwrite.write("\n")
+logfwrite.write("\n")
+logfwrite.write("*******************************************************"+str(datetime.datetime.now())+"***********************************************************\n")
+
+
+f_msp_body = open(msp_data,"r")
+
+for eachrow in f_msp_body:
+
+#API Call 
+        resp = requests.post(url, data=eachrow, headers=head,verify=False)
+
+#Log File Operations
+        print(resp.text)
+        logfwrite.write(resp.text+"\n")
+logfwrite.close()
+f_msp_body.close()
+conf_file.close()
