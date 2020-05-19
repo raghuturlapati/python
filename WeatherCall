@@ -20,10 +20,12 @@ for child in root.iter('site'):
     cityName = child.find('nameEn').text
     provinceCd = child.find('provinceCode').text
     code = child.get('code')
+    print(cityName)
+    print(cityName.find(in_city))
     if(cityName.find(in_city)== -1):
         print('No Match Found for your City Name!!\n')
         print('Please try again with a valid Canadian City')
-        break
+        
     
     if(cityName.find(in_city)!= -1):
         print('Found your city : '+str(cityName) +' '+str(provinceCd)+' '+str(code))
