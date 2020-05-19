@@ -1,0 +1,47 @@
+"""
+Created on Wed May 13 23:37:19 2020
+# Pulls Current Weather information from Weather Canada.
+Version: 0.1 (Draft)
+Create DateTime: 2019-12-29
+@author: Raghu Turlapati
+"""
+
+from urllib.request import urlopen
+from xml.etree.ElementTree import parse
+
+url = 'https://dd.weather.gc.ca/citypage_weather/xml/siteList.xml'
+w_url = 'https://dd.weather.gc.ca/citypage_weather/xml'
+var_url = urlopen(url)
+xmldoc = parse(var_url)
+ls_city = {}
+
+in_city = input("Please Enter your city Name to find the Weather Information : ")
+
+root = xmldoc.getroot()
+for child in root.iter('site'):
+    cityName = child.find('nameEn').text
+    provinceCd = child.find('provinceCode').text
+    code = child.get('code')
+    
+    if(cityName.find(in_city)!= -1):
+        print('Found your city : '+str(cityName) +' '+str(provinceCd)+' '+str(code))
+#        print('\nFinding Weather Information Please Wait.....\n')
+        w_fin_url = w_url+'/'+str(provinceCd)+'/'+str(code)+'_e.xml'
+#        print(w_fin_url)
+        var_url = urlopen(w_fin_url)
+        xmldoc = parse(var_url)
+
+        root1 = xmldoc.find('currentConditions')
+        for child1 in root1:
+#            print(child1.tag)
+#            print(child1.text)
+            ls_city[child1.tag] = child1.text
+            
+        break
+print(ls_city)    
+print("***************************************************************")    
+print("Current Weather Information for "+cityName)    
+print('Current Conditions : '+str(ls_city['condition']))
+print('The Current Temperature : '+str(ls_city['temperature']))
+print('Dew Point : '+str(ls_city['dewpoint']))    
+print("***************************************************************")  
