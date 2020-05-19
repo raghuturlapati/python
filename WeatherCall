@@ -1,10 +1,8 @@
-"""
-Created on Wed May 13 23:37:19 2020
+#Created on Wed May 13 23:37:19 2020
 # Pulls Current Weather information from Weather Canada.
-Version: 0.1 (Draft)
-Create DateTime: 2019-12-29
-@author: Raghu Turlapati
-"""
+#Version: 0.1 (Draft)
+#Create DateTime: 2019-12-29
+#@author: Raghu Turlapati
 
 from urllib.request import urlopen
 from xml.etree.ElementTree import parse
@@ -22,6 +20,11 @@ for child in root.iter('site'):
     cityName = child.find('nameEn').text
     provinceCd = child.find('provinceCode').text
     code = child.get('code')
+    if(cityName.find(in_city)== -1):
+        print('No Match Found for your City Name!!\n')
+        print('Please try again with a valid Canadian City')
+        break
+    
     
     if(cityName.find(in_city)!= -1):
         print('Found your city : '+str(cityName) +' '+str(provinceCd)+' '+str(code))
