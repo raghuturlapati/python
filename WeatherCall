@@ -12,7 +12,7 @@ w_url = 'https://dd.weather.gc.ca/citypage_weather/xml'
 var_url = urlopen(url)
 xmldoc = parse(var_url)
 ls_city = {}
-
+fnd_city = 0
 in_city = input("Please Enter your city Name to find the Weather Information : ")
 
 root = xmldoc.getroot()
@@ -25,7 +25,6 @@ for child in root.iter('site'):
         print('Please try again with a valid Canadian City')
         break
     
-    
     if(cityName.find(in_city)!= -1):
         print('Found your city : '+str(cityName) +' '+str(provinceCd)+' '+str(code))
 #        print('\nFinding Weather Information Please Wait.....\n')
@@ -33,7 +32,7 @@ for child in root.iter('site'):
 #        print(w_fin_url)
         var_url = urlopen(w_fin_url)
         xmldoc = parse(var_url)
-
+        fnd_city = 1
         root1 = xmldoc.find('currentConditions')
         for child1 in root1:
 #            print(child1.tag)
@@ -41,10 +40,11 @@ for child in root.iter('site'):
             ls_city[child1.tag] = child1.text
             
         break
-print(ls_city)    
-print("***************************************************************")    
-print("Current Weather Information for "+cityName)    
-print('Current Conditions : '+str(ls_city['condition']))
-print('The Current Temperature : '+str(ls_city['temperature']))
-print('Dew Point : '+str(ls_city['dewpoint']))    
-print("***************************************************************")  
+if(fnd_city==1):
+    print(ls_city)    
+    print("***************************************************************")    
+    print("Current Weather Information for "+cityName)    
+    print('Current Conditions : '+str(ls_city['condition']))
+    print('The Current Temperature : '+str(ls_city['temperature']))
+    print('Dew Point : '+str(ls_city['dewpoint']))    
+    print("***************************************************************")  
