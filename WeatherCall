@@ -13,17 +13,17 @@ xmldoc = parse(var_url)
 ls_city = {}
 fnd_city = 0
 in_city = input("Please Enter your city Name to find the Weather Information : ")
+in_city = in_city.upper()
 
 root = xmldoc.getroot()
 for child in root.iter('site'):
     cityName = child.find('nameEn').text
+    cityName = cityName.upper()
     provinceCd = child.find('provinceCode').text
     code = child.get('code')
-    print(cityName)
-    print(cityName.find(in_city))
-    if(cityName.find(in_city)== -1):
-        print('No Match Found for your City Name!!\n')
-        print('Please try again with a valid Canadian City')
+#    print(cityName)
+#    print(cityName.find(in_city))
+
         
     
     if(cityName.find(in_city)!= -1):
@@ -49,3 +49,6 @@ if(fnd_city==1):
     print('The Current Temperature : '+str(ls_city['temperature']))
     print('Dew Point : '+str(ls_city['dewpoint']))    
     print("***************************************************************")  
+if(fnd_city!=1):
+        print('No Match Found for your City Name!!\n')
+        print('Please try again with a valid Canadian City')
