@@ -1,15 +1,24 @@
-# Pulls Current Weather information from Weather Canada.
+# Pulls Current Weather information from Weather Canada and Reads it out Load
 #Version: 0.1 (Draft)
 #Create DateTime: 2019-12-29
 #@author: Raghu Turlapati
 
 from urllib.request import urlopen
 from xml.etree.ElementTree import parse
+import pyttsx3
+engine = pyttsx3.init()
+
 
 url = 'https://dd.weather.gc.ca/citypage_weather/xml/siteList.xml'
 w_url = 'https://dd.weather.gc.ca/citypage_weather/xml'
 var_url = urlopen(url)
 xmldoc = parse(var_url)
+voices = engine.getProperty('voices')
+# 1 - Female, 0 - Male
+engine.setProperty('voice',voices[1].id)
+
+
+
 ls_city = {}
 fnd_city = 0
 in_city = input("Please Enter your city Name to find the Weather Information : ")
@@ -48,7 +57,13 @@ if(fnd_city==1):
     print('Current Conditions : '+str(ls_city['condition']))
     print('The Current Temperature : '+str(ls_city['temperature']))
     print('Dew Point : '+str(ls_city['dewpoint']))    
+    engine.say("Current Weather Information for "+cityName)
+    engine.say('Current Conditions : '+str(ls_city['condition']))
+    engine.say('The Current Temperature : '+str(ls_city['temperature']))
+    engine.say('Dew Point : '+str(ls_city['dewpoint']))  
     print("***************************************************************")  
 if(fnd_city!=1):
         print('No Match Found for your City Name!!\n')
         print('Please try again with a valid Canadian City')
+engine.runAndWait()        
+engine.stop()        
